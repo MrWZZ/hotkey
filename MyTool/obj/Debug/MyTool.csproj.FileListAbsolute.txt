@@ -1,0 +1,15 @@
+G:\VS\MyTool\MyTool\bin\Debug\MyTool.exe.config
+G:\VS\MyTool\MyTool\bin\Debug\MyTool.exe
+G:\VS\MyTool\MyTool\bin\Debug\MyTool.pdb
+G:\VS\MyTool\MyTool\obj\Debug\MyTool.csprojAssemblyReference.cache
+G:\VS\MyTool\MyTool\obj\Debug\MainWindow.g.cs
+G:\VS\MyTool\MyTool\obj\Debug\App.g.cs
+G:\VS\MyTool\MyTool\obj\Debug\MyTool_MarkupCompile.cache
+G:\VS\MyTool\MyTool\obj\Debug\MyTool_MarkupCompile.lref
+G:\VS\MyTool\MyTool\obj\Debug\MainWindow.baml
+G:\VS\MyTool\MyTool\obj\Debug\MyTool.g.resources
+G:\VS\MyTool\MyTool\obj\Debug\MyTool.Properties.Resources.resources
+G:\VS\MyTool\MyTool\obj\Debug\MyTool.csproj.GenerateResource.cache
+G:\VS\MyTool\MyTool\obj\Debug\MyTool.csproj.CoreCompileInputs.cache
+G:\VS\MyTool\MyTool\obj\Debug\MyTool.exe
+G:\VS\MyTool\MyTool\obj\Debug\MyTool.pdb

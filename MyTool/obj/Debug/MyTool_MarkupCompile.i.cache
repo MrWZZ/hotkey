@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-G:\VS\MyTool\MyTool\obj\Debug\
+E:\hotkey\MyTool\obj\Debug\
 MyTool
 none
 false
 DEBUG;TRACE
-G:\VS\MyTool\MyTool\App.xaml
-11151548125
+E:\hotkey\MyTool\App.xaml
+2675370491
 
-11444066273
+12-1603681408
 151984215308
-MainWindow.xaml;
+MainWindow.xaml;WindowSetting.xaml;
 
-False
+True
 

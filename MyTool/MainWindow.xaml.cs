@@ -34,6 +34,7 @@ namespace MyTool
             this.Closing += MainWindow_Closing;
             WindowStartupLocation = WindowStartupLocation.Manual;
             SetWindowPos();
+            TopManager.SetTop(this);
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -77,12 +78,16 @@ namespace MyTool
 
         private void SetWindowPos()
         {
-            double w = SystemParameters.PrimaryScreenWidth;
-            double h = SystemParameters.PrimaryScreenHeight;
+            //屏幕高度
+            double ph = SystemParameters.PrimaryScreenHeight;
+            //工作区高度
+            double fh = SystemParameters.FullPrimaryScreenHeight;
+            //任务栏高度
+            double offset = ph-fh;
 
-            //将窗口放在右下角
-            this.Top = h - this.Height;
-            this.Left = w - this.Width;
+            //将窗口放在左下角
+            this.Top = ph - this.Height - offset;
+            this.Left = 0;
         }
 
         //窗口显示设置
@@ -93,12 +98,14 @@ namespace MyTool
                 Visibility = Visibility.Visible;
                 TopManager.SetTop(this);
                 SetWindowPos();
+                this.txtInput.SelectAll();
                 Activate();
             }
             else
             {
                 Visibility = Visibility.Hidden;
             }
+            
         }
 
         /// <summary>

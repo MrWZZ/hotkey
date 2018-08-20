@@ -57,9 +57,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Script\HotKey.cs" />
+    <Compile Include="Script\LockKey.cs" />
     <Compile Include="Script\TopWindow.cs" />
-    <Compile Include="WindowSetting.xaml.cs">
-      <DependentUpon>WindowSetting.xaml</DependentUpon>
+    <Compile Include="Resources\SettingWindow.xaml.cs">
+      <DependentUpon>SettingWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -73,7 +74,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="WindowSetting.xaml">
+    <Page Include="Resources\SettingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

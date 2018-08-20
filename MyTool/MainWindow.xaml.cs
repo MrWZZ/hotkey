@@ -72,8 +72,8 @@ namespace MyTool
 
         private void Setting(object sender, EventArgs e)
         {
-            //todo 设置窗口
-            
+            SettingWindow sw = new SettingWindow();
+            sw.Show();
         }
 
         private void SetWindowPos()

@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace LockKey
+namespace MyTool.Script
 {
     class LockKeyManager
     {
         public delegate int HookProc(int nCode, int wParam, IntPtr lParam);
-        public delegate void GetCombineKeyHandle(KeyCombine keyCombine);
+        public delegate void GetCombineKeyHandle(KeysInfo keyCombine);
         /// <summary>
         /// 得到组合键
         /// </summary>
@@ -21,20 +18,9 @@ namespace LockKey
         public const int WH_KEYBOARD_LL = 13;
 
         //功能键值列表
-        private List<int> lockKey = new List<int>();
+        private List<uint> lockKey = new List<uint>();
         //普通键值
-        private int commonKey = -1;
-
-        public struct KeyCombine
-        {
-            public List<int> lockKey;
-            public int commonKey;
-            public KeyCombine(List<int> lockKey,int commonKey)
-            {
-                this.lockKey = lockKey;
-                this.commonKey = commonKey;
-            }
-        }
+        private uint commonKey = 0;
 
         //LowLevel键盘截获，如果是WH_KEYBOARD＝2，并不能对系统键盘截取，Acrobat Reader会在你截取之前获得键盘。  
         HookProc KeyBoardHookProcedure;
@@ -89,7 +75,7 @@ namespace LockKey
         public void Hook_Clear()
         {
             lockKey.Clear();
-            commonKey = -1;
+            commonKey = 0;
 
             bool retKeyboard = true;
             if (hHook != 0)
@@ -108,7 +94,7 @@ namespace LockKey
                 //键盘弹起取消钩子
                 if (wParam == 257)
                 {
-                    GetCombineKeyEvent(new KeyCombine(this.lockKey,this.commonKey));
+                    GetCombineKeyEvent(new KeysInfo(this.lockKey,this.commonKey));
                     Hook_Clear();
                 }
                 else
@@ -124,13 +110,13 @@ namespace LockKey
                         case 165://RightAlt
                         case 91://LeftWin
                         case 92://RightWin
-                            if (!lockKey.Contains(kbh.vkCode))
+                            if (!lockKey.Contains((uint)kbh.vkCode))
                             {
-                                lockKey.Add(kbh.vkCode);
+                                lockKey.Add((uint)kbh.vkCode);
                             }
                             return 1;
                         default:
-                            commonKey = kbh.vkCode;
+                            commonKey = (uint)kbh.vkCode;
                             break;
                     }
                 }

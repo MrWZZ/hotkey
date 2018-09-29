@@ -2,9 +2,8 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Forms;
-using System.Windows.Interop;
 using TopWindow;
-using HotKey;
+using MyTool.Script;
 
 namespace MyTool
 {
@@ -15,26 +14,30 @@ namespace MyTool
     {
         //系统托盘
         public NotifyIcon notifyIcon;
-        //快捷键管理
-        public HotKeyManager hotKeyManager;
 
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);
             //注册快捷键设置
-            hotKeyManager = new HotKeyManager(this);
-            hotKeyManager.RegisterHotkey(Keys.Z, HotKeyManager.KeyFlags.MOD_ALT, ()=>ShowWindow());
+            AllControl.register = new Register(this);
+            AllControl.ReadConfig();
         }
 
         public MainWindow()
         {
             InitializeComponent();
             InitNotify();
-
-            this.Closing += MainWindow_Closing;
+            Closing += MainWindow_Closing;
+            Closed += MainWindow_Closed;
             WindowStartupLocation = WindowStartupLocation.Manual;
             SetWindowPos();
             TopManager.SetTop(this);
+            WindowCenter.MainWindow = this;
+        }
+
+        private void MainWindow_Closed(object sender, EventArgs e)
+        {
+            AllControl.SaveConfig();
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -49,11 +52,12 @@ namespace MyTool
         private void InitNotify()
         {
             //设置托盘的各个属性
-            notifyIcon = new NotifyIcon();
-            notifyIcon.Text = "工具";
-
-            notifyIcon.Icon = Properties.Resources.favicon;
-            notifyIcon.Visible = true;
+            notifyIcon = new NotifyIcon
+            {
+                Text = "工具",
+                Icon = Properties.Resources.favicon,
+                Visible = true
+            };
 
             //退出菜单项
             MenuItem exit = new MenuItem("退出");
@@ -72,8 +76,7 @@ namespace MyTool
 
         private void Setting(object sender, EventArgs e)
         {
-            SettingWindow sw = new SettingWindow();
-            sw.Show();
+            new SettingWindow().Show();
         }
 
         private void SetWindowPos()
@@ -91,7 +94,7 @@ namespace MyTool
         }
 
         //窗口显示设置
-        private void ShowWindow(bool isShow = true)
+        public void ShowWindow(bool isShow = true)
         {
             if (isShow)
             {
@@ -129,7 +132,6 @@ namespace MyTool
         private void Exit(object sender, EventArgs e)
         {
             this.notifyIcon.Visible = false;
-            hotKeyManager.Clear();
             System.Windows.Application.Current.Shutdown();
         }
 
@@ -138,6 +140,7 @@ namespace MyTool
             if(e.Key == Key.Enter)
             {
                 Console.WriteLine(this.txtInput.Text);
+                //TODO 回车后对指令执行方法
                 ShowWindow(false);
             }
         }

@@ -1,26 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using System.Windows.Interop;
-using System.Collections.Generic;
+using System.Windows;
 
-namespace HotKey
+namespace MyTool.Script
 {
-    public class HotKeyManager
+    public class Register
     {
-        //快捷键方法
-        private Dictionary<uint, Action> hotkeyMethods;
-        //窗口句柄
         private IntPtr hWnd;
         private HwndSource source;
-
-        public enum KeyFlags
-        {
-            MOD_ALT = 0x1,
-            MOD_CONTROL = 0x2,
-            MOD_SHIFT = 0x4,
-            MOD_WIN = 0x8
-        }
 
         [DllImport("user32.dll")]
         public static extern uint RegisterHotKey(IntPtr hWnd, uint id, uint fsModifiers, uint vk);
@@ -34,55 +22,39 @@ namespace HotKey
         [DllImport("kernel32.dll")]
         public static extern uint GlobalDeleteAtom(uint nAtom);
 
-        public HotKeyManager(System.Windows.Window window)
+        public Register(Window window)
         {
             hWnd = new WindowInteropHelper(window).Handle;
-            hotkeyMethods = new Dictionary<uint, Action>();
-            source = System.Windows.PresentationSource.FromVisual(window) as HwndSource;
+            source = PresentationSource.FromVisual(window) as HwndSource;
             source.AddHook(Listener);
         }
 
         /// <summary>
-        /// 注册快捷键事件
+        /// 注册快捷键
         /// </summary>
-        /// <param name="Key">键盘字符</param>
-        /// <param name="keyflags">组合键标志</param>
-        /// <param name="hotkeyMethod">快捷键事件</param>
-        public uint RegisterHotkey(Keys Key, KeyFlags keyflags, Action hotkeyMethod)
+        /// <param name="key">实体键</param>
+        /// <param name="keyflag">功能键</param>
+        /// <param name="hotkeyid">该快捷键对应的全局ID，用于判断用户当前按下的是什么组合键</param>
+        /// <returns>是否注册成功</returns>
+        public uint RegisterHotkey(uint key, uint keyflag,out uint hotkeyid)
         {
-            uint hotkeyid = GlobalAddAtom(Guid.NewGuid().ToString());
-            RegisterHotKey(hWnd, hotkeyid, (uint)keyflags, (uint)Key);
-            hotkeyMethods.Add(hotkeyid, hotkeyMethod);
-            return hotkeyid;
+            hotkeyid = GlobalAddAtom(Guid.NewGuid().ToString());
+            return RegisterHotKey(hWnd, hotkeyid, keyflag, key);
         }
 
         /// <summary>
-        /// 注销指定事件
+        /// 注销快捷键
         /// </summary>
-        /// <param name="key">事件的key</param>
-        public void UnregisterHotkey(uint key)
+        /// <param name="key">快捷键对应的唯一ID</param>
+        /// <returns>是否删除成功</returns>
+        public uint UnregisterHotkey(uint hotkeyid)
         {
-            if(hotkeyMethods.ContainsKey(key))
-            {
-                hotkeyMethods.Remove(key);
-                UnregisterHotKey(hWnd, key);
-                GlobalDeleteAtom(key);
-            }
+            GlobalDeleteAtom(hotkeyid);
+            return UnregisterHotKey(hWnd, hotkeyid);
         }
 
-        /// <summary>
-        /// 注销所有事件
-        /// </summary>
-        public void Clear()
+        public void Destory()
         {
-            List<uint> keys = new List<uint>();
-            keys.AddRange(hotkeyMethods.Keys);
-            foreach (uint key in keys)
-            {
-                hotkeyMethods.Remove(key);
-                UnregisterHotKey(hWnd, key);
-                GlobalDeleteAtom(key);
-            }
             source.RemoveHook(Listener);
         }
 
@@ -91,11 +63,8 @@ namespace HotKey
         /// </summary>
         public IntPtr Listener(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handle)
         {
-            uint key = (uint)wParam.ToInt32();
-            if (hotkeyMethods.ContainsKey(key))
-            {
-                hotkeyMethods[key]();
-            }
+            uint hotkeyid = (uint)wParam.ToInt32();
+            AllControl.CallFunction(hotkeyid);
             return IntPtr.Zero;
         }
     }

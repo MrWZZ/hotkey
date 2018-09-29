@@ -7,33 +7,45 @@
         mc:Ignorable="d"
         Title="WindowSetting" Height="700" Width="600">
     <Grid>
-        <TabControl Height="670" VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="9*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TabControl>
             <TabItem Header="设置" Height="30" Width="100">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"></ColumnDefinition>
                         <ColumnDefinition Width="1*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-
-                    <TextBox Name="txtCmd" Text="Ctrl+Alt+Shift+T" IsReadOnly="True" Width="120" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,15,0,0" PreviewMouseUp="txtCmd_PreviewMouseUp" MouseLeave="txtCmd_MouseLeave" FontSize="14"/>
-                    <TextBlock Padding="10" Text="快捷输入" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="135,13,0,0" RenderTransformOrigin="0.515,0.936"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="0*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBox x:Name="txtCmd_Open" IsReadOnly="True" Width="120" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,15,0,0" PreviewMouseUp="Control_PreviewMouseUp" MouseLeave="Control_MouseLeave" FontSize="14"/>
+                    <TextBlock Padding="10" Text="快捷输入" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="135,13,0,0" RenderTransformOrigin="0.515,0.936" Height="35" Width="68"/>
+                    <TextBox x:Name="txtCmd_Close" IsReadOnly="True" Width="120" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,55,0,0" PreviewMouseUp="Control_PreviewMouseUp" MouseLeave="Control_MouseLeave" FontSize="14"/>
+                    <TextBlock Padding="10" Text="关闭快捷输入" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="135,53,0,0" RenderTransformOrigin="0.515,0.936" Height="35" Width="92"/>
                 </Grid>
             </TabItem>
             <TabItem Header="快捷" Height="30" Width="100">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="100*"></RowDefinition>
-                        <RowDefinition Height="500*"></RowDefinition>
-                        <RowDefinition Height="100*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="9*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="450*"></ColumnDefinition>
                         <ColumnDefinition Width="150*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
+
                 </Grid>
             </TabItem>
-
-
         </TabControl>
+
+        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="0,1,0,0">
+            <TextBlock x:Name="txtMsg" Grid.Row="1" TextWrapping="Wrap" Foreground="#FFF70606" Grid.ColumnSpan="2" Padding="10,10,0,0"/>
+        </Border>
     </Grid>
 </Window>

@@ -5,6 +5,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using MyTool.Script;
+using Microsoft.Win32;
+using System;
+using System.Diagnostics;
 
 namespace MyTool
 {
@@ -176,5 +179,97 @@ namespace MyTool
             else
                 e.Effects = DragDropEffects.None;
         }
+
+        private void cbAuto_Checked(object sender, RoutedEventArgs e)
+        {
+            bool isChecked = (bool)cbAuto.IsChecked;
+            bool isSuccess;
+            if (isChecked) //设置开机自启动  
+            {
+                string name = Process.GetCurrentProcess().MainModule.FileName;
+                isSuccess = SetSelfStarting(true, name);
+            }
+            else //取消开机自启动  
+            {
+                string name = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name.ToString();
+                isSuccess = SetSelfStarting(false, name);
+            }
+
+            if (isSuccess)
+            {
+                ShowMassage("设置成功。");
+            }
+            else
+            {
+                ShowMassage("设置失败");
+            }
+        }
+
+
+        /// <summary>
+        /// 开机自动启动
+        /// </summary>
+        /// <param name="started">设置开机启动，或取消开机启动</param>
+        /// <param name="exeName">注册表中的名称</param>
+        /// <returns>开启或停用是否成功</returns>
+        public static bool SetSelfStarting(bool started, string exeName)
+        {
+            RegistryKey key = null;
+            try
+            {
+
+                string exeDir = System.Windows.Forms.Application.ExecutablePath;
+                key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);//打开注册表子项
+
+                if (key == null)//如果该项不存在的话，则创建该子项
+                {
+                    key = Registry.LocalMachine.CreateSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
+                }
+                if (started)
+                {
+                    try
+                    {
+                        object ob = key.GetValue(exeName, -1);
+
+                        if (!ob.ToString().Equals(exeDir))
+                        {
+                            if (!ob.ToString().Equals("-1"))
+                            {
+                                key.DeleteValue(exeName);//取消开机启动
+                            }
+                            key.SetValue(exeName, exeDir);//设置为开机启动
+                        }
+                        key.Close();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        key.DeleteValue(exeName);//取消开机启动
+                        key.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (key != null)
+                {
+                    key.Close();
+                }
+                return false;
+            }
+        }
+
     }
 }

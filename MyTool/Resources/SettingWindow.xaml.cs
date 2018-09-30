@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -20,6 +21,7 @@ namespace MyTool
             WindowCenter.SettingWindow = this;
             LockKeyManager.GetCombineKeyEvent += LockKeyManager_GetCombineKeyEvent;
             SetControlName();
+            AddAllItemListBox();
         }
 
         //监听组合键返回了什么信息
@@ -101,6 +103,28 @@ namespace MyTool
             
         }
 
+        //在快捷列表中添加Item
+        public void AddItemInListBox(HotPathInfo info)
+        {
+            lbItem.Items.Add(new HotPathItem(info));
+        }
+
+        //读取配置全部加载进去
+        public void AddAllItemListBox()
+        {
+            foreach (var item in AllControl.hotpathId.Values)
+            {
+                AddItemInListBox(item);
+            }
+        }
+
+        //移除控件
+        public void removeListBoxItem(HotPathItem item)
+        {
+            lbItem.Items.Remove(item);
+            AllControl.RemoveHotPathItem(item.txtID.Text);
+        }
+
         private void Control_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             ShowFous((Control)sender,true);
@@ -117,5 +141,40 @@ namespace MyTool
             LockKeyManager.Hook_Clear();
         }
 
+        private void Grid_Drop(object sender, DragEventArgs e)
+        {
+            string fileName = "";
+            try
+            {
+                fileName = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
+            }
+            catch
+            {
+                ShowMassage("无法识别该文件。");
+                return;
+            }
+            
+            //向listbox中添加
+            //当前最大ID
+            foreach (var item in AllControl.hotpathId.Keys)
+            {
+                int i = int.Parse(item);
+                if(AllControl.canUseMinID <= i)
+                {
+                    AllControl.canUseMinID = i + 1;
+                }
+            }
+            int index = AllControl.canUseMinID;
+            AllControl.AddHotPathItem(index.ToString(), index + "-path", fileName);
+            AddItemInListBox(AllControl.hotpathId[index.ToString()]);
+        }
+
+        private void Grid_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effects = DragDropEffects.Link;
+            else
+                e.Effects = DragDropEffects.None;
+        }
     }
 }

@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows.Forms;
 using TopWindow;
 using MyTool.Script;
+using System.Windows.Media;
 
 namespace MyTool
 {
@@ -67,7 +68,7 @@ namespace MyTool
             setting.Click += new EventHandler(Setting);
 
             //关联托盘控件
-            MenuItem[] childen = new MenuItem[] { setting,exit };
+            MenuItem[] childen = new MenuItem[] { setting, exit };
             notifyIcon.ContextMenu = new ContextMenu(childen);
 
             //窗体状态改变时候触发
@@ -86,7 +87,7 @@ namespace MyTool
             //工作区高度
             double fh = SystemParameters.FullPrimaryScreenHeight;
             //任务栏高度
-            double offset = ph-fh;
+            double offset = ph - fh;
 
             //将窗口放在左下角
             this.Top = ph - this.Height - offset;
@@ -108,7 +109,7 @@ namespace MyTool
             {
                 Visibility = Visibility.Hidden;
             }
-            
+
         }
 
         /// <summary>
@@ -137,12 +138,48 @@ namespace MyTool
 
         private void txtInput_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if(e.Key == Key.Enter)
+            if (e.Key == Key.Enter)
             {
-                Console.WriteLine(this.txtInput.Text);
-                //TODO 回车后对指令执行方法
+                int num = 0;
+                if (int.TryParse(txtInput.Text, out num))
+                {
+                    //判断是否存在
+                    if (!AllControl.hotpathId.ContainsKey(txtInput.Text))
+                    {
+                        ShowMessage("ID所对应快捷路径不存在。");
+                        return;
+                    }
+                    string path = AllControl.hotpathId[txtInput.Text].path;
+                    MethodCenter.Methods[MethodName.OpenFile](path);
+                }
+                else
+                {
+                    if(txtInput.Text == "")
+                    {
+                        ShowMessage("不能为空。");
+                        return;
+                    }
+                    //判断是否存在
+                    if (!AllControl.hotpathName.ContainsKey(txtInput.Text))
+                    {
+                        ShowMessage("自定义名称所对应快捷路径不存在。");
+                        return;
+                    }
+                    string path = AllControl.hotpathName[txtInput.Text].path;
+                    MethodCenter.Methods[MethodName.OpenFile](path);
+                }
                 ShowWindow(false);
             }
+            else if(e.Key == Key.Escape)
+            {
+                ShowWindow(false);
+            }
+        }
+
+        //在方框显示消息
+        private void ShowMessage(string msg)
+        {
+            txtInput.Text = msg;
         }
     }
 }

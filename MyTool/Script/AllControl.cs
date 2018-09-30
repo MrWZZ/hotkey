@@ -15,17 +15,38 @@ namespace MyTool.Script
         /// <summary>
         /// 全局热键注册器
         /// </summary>
-        public static Register register; 
+        public static Register register;
 
         /// <summary>
         /// 当前所操作的控件
         /// </summary>
         public static Control CurrControl { get; set; }
 
+        //当前最大listbox的ID
+        public static int canUseMinID = 0;
         //控件及对应的快捷键信息
         public static Dictionary<string, Item> items = new Dictionary<string, Item>();
+        //列表路径快捷方式,id
+        public static Dictionary<string, HotPathInfo> hotpathId = new Dictionary<string, HotPathInfo>();
+
         //热键ID及对应的快捷键信息
         public static Dictionary<uint, Item> keyIds = new Dictionary<uint, Item>();
+        //列表路径快捷方式,name
+        public static Dictionary<string, HotPathInfo> hotpathName = new Dictionary<string, HotPathInfo>();
+
+
+        public static void AddHotPathItem(string ID,string fastName,string path)
+        {
+            HotPathInfo info = new HotPathInfo(ID, fastName, path);
+            hotpathId.Add(info.ID, info);
+            hotpathName.Add(info.fastName, info);
+        }
+
+        public static void RemoveHotPathItem(string ID)
+        {
+            hotpathName.Remove(hotpathId[ID].fastName);
+            hotpathId.Remove(ID);
+        }
 
         /// <summary>
         /// 添加已注册热键的控件
@@ -57,37 +78,10 @@ namespace MyTool.Script
             if (item.hotkeyid != 0)
             {
                 result = register.UnregisterHotkey(item.hotkeyid);
+                keyIds.Remove(item.hotkeyid);
             }
             return result;
         }
-
-        /// <summary>
-        /// 清除所有热键
-        /// </summary>
-        //public static void ClearHotKeyItem()
-        //{
-        //    List<uint> list = new List<uint>(hotkeyItems.Keys);
-        //    foreach(uint l in list)
-        //    {
-        //        RemoveHotKeyItem(l);
-        //    }
-        //    register.Clear();
-        //}
-
-        /// <summary>
-        /// 获取已注册热键的数据源
-        /// </summary>
-        //public static Item GetHotkeyItem(Control control)
-        //{
-        //    foreach (var item in hotkeyItems.Values)
-        //    {
-        //        if (item.control == control)
-        //        {
-        //            return item;
-        //        }
-        //    }
-        //    return null;
-        //}
 
         //用户按下快捷键，判断程序是否有对该快捷键对方法
         public static void CallFunction(uint keyId)
@@ -100,20 +94,6 @@ namespace MyTool.Script
             }
         }
 
-        /// <summary>
-        /// 重新注册所有热键
-        /// </summary>
-        //public static void ReregisterHotkey()
-        //{
-        //    foreach (Item i in hotkeyItems.Values)
-        //    {
-        //        uint result;
-        //        uint keyid = register.RegisterHotkey(i.key, i.keyFlag, out result);
-        //        ((TextBox)i.control).Text = i.keyName;
-        //        i.keyId = keyid;
-        //    }
-        //}
-
         public static string configPath = @".\hotkey_config.txt";
         //读取配置文件
         public static void ReadConfig()
@@ -121,10 +101,18 @@ namespace MyTool.Script
             //判断文件是否存在
             if (File.Exists(configPath))
             {
-                using(StreamReader sr = new StreamReader(configPath,Encoding.UTF8))
+                using (StreamReader sr = new StreamReader(configPath,Encoding.UTF8))
                 {
                     string file = sr.ReadToEnd();
-                    items = JsonConvert.DeserializeObject<Dictionary<string,Item>>(file);
+                    Config config = JsonConvert.DeserializeObject<Config>(file);
+                    canUseMinID = config.canUseMinID;
+                    items = config.items;
+                    hotpathName = config.hotpathName;
+                    foreach (var item in hotpathName.Values)
+                    {
+                        hotpathId.Add(item.ID, item);
+                    }
+
                 }
                 //注册热键
                 foreach (var itemName in items.Keys)
@@ -140,11 +128,7 @@ namespace MyTool.Script
             }
             else
             {
-                //手动给控件注册方法
-                Item i0 = new Item("txtCmd_Open", MethodName.SetMainVisible, "true");
-                items.Add(i0.controlName, i0);
-                Item i1 = new Item("txtCmd_Close", MethodName.SetMainVisible, "false");
-                items.Add(i1.controlName, i1);
+                MethodCenter.ResetConfig();
                 SaveConfig();
             }
         }
@@ -152,7 +136,12 @@ namespace MyTool.Script
         //保存配置文件
         public static void SaveConfig()
         {
-            string json = JsonConvert.SerializeObject(items,Formatting.Indented);
+            Config config = new Config();
+            config.hotpathName = hotpathName;
+            config.items = items;
+            config.canUseMinID = canUseMinID;
+
+            string json = JsonConvert.SerializeObject(config, Formatting.Indented);
             using (StreamWriter sw = new StreamWriter(configPath,false,Encoding.UTF8))
             {
                 sw.Write(json);

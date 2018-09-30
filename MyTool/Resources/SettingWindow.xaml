@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyTool"
         mc:Ignorable="d"
-        Title="WindowSetting" Height="700" Width="600">
+        Title="WindowSetting" Height="700" Width="600" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="9*"></RowDefinition>
@@ -25,8 +25,6 @@
                     </Grid.RowDefinitions>
                     <TextBox x:Name="txtCmd_Open" IsReadOnly="True" Width="120" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,15,0,0" PreviewMouseUp="Control_PreviewMouseUp" MouseLeave="Control_MouseLeave" FontSize="14"/>
                     <TextBlock Padding="10" Text="快捷输入" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="135,13,0,0" RenderTransformOrigin="0.515,0.936" Height="35" Width="68"/>
-                    <TextBox x:Name="txtCmd_Close" IsReadOnly="True" Width="120" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,55,0,0" PreviewMouseUp="Control_PreviewMouseUp" MouseLeave="Control_MouseLeave" FontSize="14"/>
-                    <TextBlock Padding="10" Text="关闭快捷输入" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="135,53,0,0" RenderTransformOrigin="0.515,0.936" Height="35" Width="92"/>
                 </Grid>
             </TabItem>
             <TabItem Header="快捷" Height="30" Width="100">
@@ -39,6 +37,16 @@
                         <ColumnDefinition Width="450*"></ColumnDefinition>
                         <ColumnDefinition Width="150*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
+                    <Border BorderBrush="Black" BorderThickness="0,0,0,1" Margin="0" Grid.ColumnSpan="2"/>
+                    <Border BorderBrush="Black" BorderThickness="1,0,0,0" Margin="0" Grid.Column="1" Grid.RowSpan="2">
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="15,431,21,26" Width="100" Height="100" >
+                            <Grid Background="#FFD8D8D8" Drop="Grid_Drop" DragEnter="Grid_DragEnter" AllowDrop="True">
+                                <TextBlock Text="拖拽" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                            </Grid>
+                        </Border>
+                    </Border>
+                    <ListBox x:Name="lbItem" Margin="10,40,10,10" Grid.Row="1" HorizontalContentAlignment="Stretch"/>
+                    <TextBlock HorizontalAlignment="Left" Height="30" Margin="10,5,0,0" Grid.Row="1" TextWrapping="Wrap" Text="快捷序号 | 自定义 | 文件路径 | 选择路径 | 删除" VerticalAlignment="Top" Width="420"/>
 
                 </Grid>
             </TabItem>

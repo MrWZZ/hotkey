@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace MyTool.Script
 {
@@ -10,7 +11,8 @@ namespace MyTool.Script
     {
         OpenFile,
         OpenWindow,
-        SetMainVisible
+        SetMainVisible,
+        OpenDesk
     }
 
     public static class MethodCenter
@@ -23,23 +25,49 @@ namespace MyTool.Script
             Methods.Add(MethodName.OpenFile, OpenFile);
             Methods.Add(MethodName.OpenWindow, OpenWindow);
             Methods.Add(MethodName.SetMainVisible, SetMainVisible);
+            Methods.Add(MethodName.OpenDesk, OpenDesk);
+        }
+
+        //重置配置表
+        public static void ResetConfig()
+        {
+            //手动给控件注册方法
+            Item i0 = new Item("txtCmd_Open", MethodName.SetMainVisible, "true");
+            AllControl.items.Add(i0.controlName, i0);
         }
 
         #region 方法实现
         // 打开指定文件
-        public static void OpenFile(string arg = "")
+        public static void OpenFile(string arg)
         {
+            if (File.Exists(arg))
+            {
+                System.Diagnostics.Process.Start(arg);
+            }
+            else if(Directory.Exists(arg))
+            {
+                System.Diagnostics.Process.Start("explorer.exe", arg);
+            }
+            else
+            {
+                //todo 路径错误
+            }
+        }
 
+        // 打开控制面板显示
+        public static void OpenDesk(string arg)
+        {
+            System.Diagnostics.Process.Start("desk.cpl");
         }
 
         // 打开指定窗口
-        public static void OpenWindow(string arg = "")
+        public static void OpenWindow(string arg)
         {
 
         }
 
         //打开关闭主窗口
-        public static void SetMainVisible(string arg = "")
+        public static void SetMainVisible(string arg)
         {
             WindowCenter.MainWindow.ShowWindow(bool.Parse(arg));
         }

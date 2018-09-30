@@ -74,7 +74,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="HotPathItem.xaml.cs">
+      <DependentUpon>HotPathItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Script\AllControl.cs" />
+    <Compile Include="Script\Config.cs" />
+    <Compile Include="Script\HotPathInfo.cs" />
     <Compile Include="Script\Item.cs" />
     <Compile Include="Script\KeysInfo.cs" />
     <Compile Include="Script\HotKey.cs" />
@@ -85,6 +90,10 @@
       <DependentUpon>SettingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Script\WindowCenter.cs" />
+    <Page Include="HotPathItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

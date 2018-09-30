@@ -1,20 +1,21 @@
 ﻿{
-  "txtCmd_Open": {
-    "hotkeyid": 49517,
-    "key": 32,
-    "keyFlag": 6,
-    "keyName": "Shift+Ctrl+Space",
-    "arg": "true",
-    "methodName": "SetMainVisible",
-    "controlName": "txtCmd_Open"
+  "canUseMinID": 0,
+  "items": {
+    "txtCmd_Open": {
+      "hotkeyid": 49423,
+      "key": 32,
+      "keyFlag": 4,
+      "keyName": "Shift+Space",
+      "arg": "true",
+      "methodName": "SetMainVisible",
+      "controlName": "txtCmd_Open"
+    }
   },
-  "txtCmd_Close": {
-    "hotkeyid": 49535,
-    "key": 32,
-    "keyFlag": 2,
-    "keyName": "Ctrl+Space",
-    "arg": "false",
-    "methodName": "SetMainVisible",
-    "controlName": "txtCmd_Close"
+  "hotpathName": {
+    "q": {
+      "ID": "0",
+      "fastName": "q",
+      "path": "C:\\Users\\Public\\Desktop\\TIM.lnk"
+    }
   }
 }

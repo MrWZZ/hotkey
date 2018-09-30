@@ -65,3 +65,5 @@ G:\hotkey\MyTool\obj\Debug\MyTool.pdb
 G:\hotkey\MyTool\bin\Debug\Newtonsoft.Json.dll
 G:\hotkey\MyTool\obj\Debug\MyTool_Content.g.cs
 G:\hotkey\MyTool\obj\Debug\MyTool.csproj.CopyComplete
+G:\hotkey\MyTool\obj\Debug\HotPathItem.g.cs
+G:\hotkey\MyTool\obj\Debug\HotPathItem.baml

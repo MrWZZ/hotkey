@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyTool"
         mc:Ignorable="d"
-        Title="WindowSetting" Height="700" Width="600" ResizeMode="NoResize">
+        Title="WindowSetting" Height="700" Width="600" ResizeMode="NoResize" Loaded="Window_Loaded" Icon="favicon.png">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="9*"></RowDefinition>
@@ -26,7 +26,7 @@
                     <Border BorderBrush="Black" BorderThickness="0,0,1,0"/>
                     <TextBox x:Name="txtCmd_Open" IsReadOnly="True" Width="120" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,15,0,0" PreviewMouseUp="Control_PreviewMouseUp" MouseLeave="Control_MouseLeave" FontSize="14"/>
                     <TextBlock Padding="10" Text="快捷输入" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="135,13,0,0" RenderTransformOrigin="0.515,0.936" Height="35" Width="68"/>
-                    <CheckBox x:Name="cbAuto" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,15,0,0" Checked="cbAuto_Checked" />
+                    <CheckBox x:Name="cbAuto" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,15,0,0" />
                     <TextBlock Padding="10" Text="开机启动" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28,5,0,0" RenderTransformOrigin="0.515,0.936" Height="35" Width="68" Grid.Column="1"/>
                 </Grid>
             </TabItem>

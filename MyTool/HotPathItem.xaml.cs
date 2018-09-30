@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using MyTool.Script;
 using Microsoft.Win32;
 using System.Windows.Forms;
+using System.IO;
 
 namespace MyTool
 {
@@ -24,14 +25,21 @@ namespace MyTool
     public partial class HotPathItem : System.Windows.Controls.UserControl
     {
         //当前控件的ID
-        private int ID;
+        private HotPathInfo info;
 
         public HotPathItem(HotPathInfo info)
         {
             InitializeComponent();
+            this.info = info;
             txtID.Text = info.ID;
             txtName.Text = info.fastName;
             txtPath.Text = info.path;
+            //判断路径是否存在
+            if (!File.Exists(info.path) && !Directory.Exists(info.path))
+            {
+                txtPath.Foreground = new SolidColorBrush(Colors.Red);
+            }
+            
         }
 
         private void btnDelet_Click(object sender, RoutedEventArgs e)
@@ -45,6 +53,7 @@ namespace MyTool
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 txtPath.Text = dialog.SelectedPath;
+                txtPath.Foreground = new SolidColorBrush(Colors.Black);
                 AllControl.hotpathId[txtID.Text].path = txtPath.Text;
             }
         }
@@ -54,6 +63,7 @@ namespace MyTool
             if (dialog.ShowDialog() == true)
             {
                 txtPath.Text = dialog.FileName;
+                txtPath.Foreground = new SolidColorBrush(Colors.Black);
                 AllControl.hotpathId[txtID.Text].path = txtPath.Text;
             }
         }
@@ -66,6 +76,7 @@ namespace MyTool
 
         private void TxtName_TextChanged(object sender, TextChangedEventArgs e)
         {
+            
             //名字不能是数字
             int num;
             if (int.TryParse(txtName.Text, out num))
@@ -82,16 +93,23 @@ namespace MyTool
             //键是否重复
             if (AllControl.hotpathName.ContainsKey(txtName.Text))
             {
-                WindowCenter.SettingWindow.ShowMassage("自定义名称重复。");
+                if(txtName.Text != info.fastName)
+                {
+                    WindowCenter.SettingWindow.ShowMassage("自定义名称重复。");
+                }
+                else
+                {
+                    WindowCenter.SettingWindow.ClearMassage();
+                }
                 return;
             }
-            WindowCenter.SettingWindow.ClearMassage( );
-            //原来的键的名字
-            HotPathInfo info = AllControl.hotpathId[ID.ToString()];
+            WindowCenter.SettingWindow.ClearMassage();
             string fn = info.fastName;
+            //原来的键的名字
             info.fastName = txtName.Text;
             AllControl.hotpathName.Remove(fn);
             AllControl.hotpathName.Add(txtName.Text, info);
+            e.Handled = false;
         }
 
         private void TxtID_TextChanged(object sender, TextChangedEventArgs e)
@@ -106,17 +124,30 @@ namespace MyTool
             //键是否重复
             if (AllControl.hotpathId.ContainsKey(txtID.Text))
             {
-                WindowCenter.SettingWindow.ShowMassage("ID名称重复。");
+                //如果和原来的一样就不显示
+                if(txtID.Text != info.ID)
+                {
+                    WindowCenter.SettingWindow.ShowMassage("ID名称重复。");
+                }
+                else
+                {
+                    WindowCenter.SettingWindow.ClearMassage();
+                }
                 return;
             }
             WindowCenter.SettingWindow.ClearMassage();
-            AllControl.hotpathId[ID.ToString()].ID = txtID.Text;
+            //原来的键的名字
+            string keyId = this.info.ID;
+            info.ID = txtID.Text;
+            AllControl.hotpathId.Remove(keyId);
+            AllControl.hotpathId.Add(info.ID, info);
+            e.Handled = false;
         }
 
         private void txt_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            int.TryParse(txtID.Text, out ID);
             ((System.Windows.Controls.TextBox)sender).SelectAll();
         }
+       
     }
 }

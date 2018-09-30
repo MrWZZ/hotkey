@@ -22,19 +22,21 @@ namespace MyTool
             //注册快捷键设置
             AllControl.register = new Register(this);
             AllControl.ReadConfig();
+            ShowWindow(false);
         }
 
         public MainWindow()
         {
             InitializeComponent();
             InitNotify();
+            //窗体状态改变时候触发
+            StateChanged += OnStateChanged;
             Closing += MainWindow_Closing;
             Closed += MainWindow_Closed;
             WindowStartupLocation = WindowStartupLocation.Manual;
-            SetWindowPos();
-            TopManager.SetTop(this);
             WindowCenter.MainWindow = this;
         }
+
 
         private void MainWindow_Closed(object sender, EventArgs e)
         {
@@ -70,14 +72,17 @@ namespace MyTool
             //关联托盘控件
             MenuItem[] childen = new MenuItem[] { setting, exit };
             notifyIcon.ContextMenu = new ContextMenu(childen);
-
-            //窗体状态改变时候触发
-            this.StateChanged += new EventHandler(OnStateChanged);
         }
 
         private void Setting(object sender, EventArgs e)
         {
-            new SettingWindow().Show();
+            if(WindowCenter.SettingWindow == null)
+            {
+                WindowCenter.SettingWindow = new SettingWindow();
+            }
+            WindowCenter.SettingWindow.Show();
+            
+
         }
 
         private void SetWindowPos()
@@ -180,6 +185,11 @@ namespace MyTool
         private void ShowMessage(string msg)
         {
             txtInput.Text = msg;
+        }
+
+        public void ShowNotify(string msg)
+        {
+            notifyIcon.ShowBalloonTip(500, "热键工具", msg, ToolTipIcon.Error);
         }
     }
 }

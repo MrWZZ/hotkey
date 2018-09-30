@@ -50,7 +50,7 @@ namespace MyTool.Script
             }
             else
             {
-                //todo 路径错误
+                WindowCenter.MainWindow.ShowNotify("路径未找到。");
             }
         }
 

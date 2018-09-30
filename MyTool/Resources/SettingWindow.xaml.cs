@@ -21,10 +21,24 @@ namespace MyTool
         public SettingWindow()
         {
             InitializeComponent();
-            WindowCenter.SettingWindow = this;
             LockKeyManager.GetCombineKeyEvent += LockKeyManager_GetCombineKeyEvent;
             SetControlName();
             AddAllItemListBox();
+            Closed += SettingWindow_Closed;
+
+            if (AllControl.isAutoStartUp)
+            {
+                cbAuto.IsChecked = true;
+            }
+            else
+            {
+                cbAuto.IsChecked = false;
+            }
+        }
+
+        private void SettingWindow_Closed(object sender, EventArgs e)
+        {
+            WindowCenter.SettingWindow = null;
         }
 
         //监听组合键返回了什么信息
@@ -87,7 +101,7 @@ namespace MyTool
         private void ShowFous(Control control,bool isShow)
         {
             if(isShow)
-                control.Background = new SolidColorBrush(Colors.Red);
+                control.Background = new SolidColorBrush(Colors.AliceBlue);
             else
                 control.Background = new SolidColorBrush(Colors.White);
         }
@@ -168,7 +182,7 @@ namespace MyTool
                 }
             }
             int index = AllControl.canUseMinID;
-            AllControl.AddHotPathItem(index.ToString(), index + "-path", fileName);
+            AllControl.AddHotPathItem(index.ToString(), index + "-name", fileName);
             AddItemInListBox(AllControl.hotpathId[index.ToString()]);
         }
 
@@ -183,15 +197,16 @@ namespace MyTool
         private void cbAuto_Checked(object sender, RoutedEventArgs e)
         {
             bool isChecked = (bool)cbAuto.IsChecked;
+            string name = Process.GetCurrentProcess().MainModule.FileName;
             bool isSuccess;
             if (isChecked) //设置开机自启动  
             {
-                string name = Process.GetCurrentProcess().MainModule.FileName;
+                AllControl.isAutoStartUp = true;
                 isSuccess = SetSelfStarting(true, name);
             }
             else //取消开机自启动  
             {
-                string name = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name.ToString();
+                AllControl.isAutoStartUp = false;
                 isSuccess = SetSelfStarting(false, name);
             }
 
@@ -271,5 +286,9 @@ namespace MyTool
             }
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            cbAuto.Click += cbAuto_Checked;
+        }
     }
 }

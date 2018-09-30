@@ -67,3 +67,10 @@ G:\hotkey\MyTool\obj\Debug\MyTool_Content.g.cs
 G:\hotkey\MyTool\obj\Debug\MyTool.csproj.CopyComplete
 G:\hotkey\MyTool\obj\Debug\HotPathItem.g.cs
 G:\hotkey\MyTool\obj\Debug\HotPathItem.baml
+E:\hotkey\MyTool\bin\Debug\Newtonsoft.Json.dll
+E:\hotkey\MyTool\obj\Debug\HotPathItem.g.cs
+E:\hotkey\MyTool\obj\Debug\Resources\SettingWindow.g.cs
+E:\hotkey\MyTool\obj\Debug\MyTool_Content.g.cs
+E:\hotkey\MyTool\obj\Debug\HotPathItem.baml
+E:\hotkey\MyTool\obj\Debug\Resources\SettingWindow.baml
+E:\hotkey\MyTool\obj\Debug\MyTool.csproj.CopyComplete

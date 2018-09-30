@@ -1,8 +1,9 @@
 ﻿{
+  "isAutoStartUp": false,
   "canUseMinID": 0,
   "items": {
     "txtCmd_Open": {
-      "hotkeyid": 49423,
+      "hotkeyid": 49265,
       "key": 32,
       "keyFlag": 4,
       "keyName": "Shift+Space",
@@ -12,10 +13,10 @@
     }
   },
   "hotpathName": {
-    "q": {
+    "0-name": {
       "ID": "0",
-      "fastName": "q",
-      "path": "C:\\Users\\Public\\Desktop\\TIM.lnk"
+      "fastName": "0-name",
+      "path": "C:\\Users\\Administrator\\Desktop\\Tool"
     }
   }
 }

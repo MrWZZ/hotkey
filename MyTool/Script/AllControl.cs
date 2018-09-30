@@ -22,6 +22,8 @@ namespace MyTool.Script
         /// </summary>
         public static Control CurrControl { get; set; }
 
+        //是否开机启动
+        public static bool isAutoStartUp = false;
         //当前最大listbox的ID
         public static int canUseMinID = 0;
         //控件及对应的快捷键信息
@@ -101,19 +103,33 @@ namespace MyTool.Script
             //判断文件是否存在
             if (File.Exists(configPath))
             {
+                Config config;
                 using (StreamReader sr = new StreamReader(configPath,Encoding.UTF8))
                 {
                     string file = sr.ReadToEnd();
-                    Config config = JsonConvert.DeserializeObject<Config>(file);
-                    canUseMinID = config.canUseMinID;
-                    items = config.items;
-                    hotpathName = config.hotpathName;
-                    foreach (var item in hotpathName.Values)
-                    {
-                        hotpathId.Add(item.ID, item);
-                    }
-
+                    config = JsonConvert.DeserializeObject<Config>(file);
                 }
+
+                canUseMinID = config.canUseMinID;
+                items = config.items;
+                hotpathName = config.hotpathName;
+                isAutoStartUp = config.isAutoStartUp;
+                //判断是否文件路径发生改变
+                bool isChange = false;
+                foreach (var item in hotpathName.Values)
+                {
+                    hotpathId.Add(item.ID, item);
+                    //判断路径是否存在
+                    if (!File.Exists(item.path) && !Directory.Exists(item.path))
+                    {
+                        isChange = true;
+                    }
+                }
+                if (isChange)
+                {
+                    WindowCenter.MainWindow.ShowNotify("有文件的路径发生改变，请打开设置面板重新设置确定路径。");
+                }
+
                 //注册热键
                 foreach (var itemName in items.Keys)
                 {
@@ -140,6 +156,7 @@ namespace MyTool.Script
             config.hotpathName = hotpathName;
             config.items = items;
             config.canUseMinID = canUseMinID;
+            config.isAutoStartUp = isAutoStartUp;
 
             string json = JsonConvert.SerializeObject(config, Formatting.Indented);
             using (StreamWriter sw = new StreamWriter(configPath,false,Encoding.UTF8))

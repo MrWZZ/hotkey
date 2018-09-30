@@ -9,7 +9,9 @@ namespace MyTool.Script
     [Serializable]
     public class Config
     {
-        //当前最小可用listbox的ID
+        //是否开机启动
+        public bool isAutoStartUp;
+        //当前最大可用listbox的ID
         public int canUseMinID;
         //控件及对应的快捷键信息
         public Dictionary<string, Item> items;

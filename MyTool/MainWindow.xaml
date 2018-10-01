@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyTool"
-        Title="Quick" Height="200" Width="400" WindowStyle="None" ScrollViewer.VerticalScrollBarVisibility="Disabled" Icon="Resources/favicon.png" ResizeMode="NoResize">
+        Background="#FFD7D7D7" Title="Quick" Height="100" Width="400" WindowStyle="None" ScrollViewer.VerticalScrollBarVisibility="Disabled" Icon="Resources/favicon.png" ResizeMode="NoResize">
     <Grid FocusManager.FocusedElement="{Binding ElementName=txtInput}" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="True">
         <TextBox x:Name="txtInput" HorizontalAlignment="Center" Height="50" Margin="0" TextWrapping="Wrap" VerticalAlignment="Center" Width="300" Padding="0" FontSize="16" VerticalContentAlignment="Center" KeyDown="txtInput_KeyDown"/>
     </Grid>

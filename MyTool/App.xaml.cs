@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,8 +16,22 @@ namespace MyTool
     /// </summary>
     public partial class App : Application
     {
+    
+        private static System.Threading.Mutex mutex;
+
         protected override void OnStartup(StartupEventArgs e)
         {
+            //只运行一个实例
+            bool result;
+            string name = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name.ToString();
+            mutex = new System.Threading.Mutex(true, name,out result);
+            if (!result)
+            {
+                MessageBox.Show("已有一个程序实例在运行。");
+                Environment.Exit(0);
+                return;
+            }
+
             base.OnStartup(e);
             //UI线程未捕获异常处理事件
             this.DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(App_DispatcherUnhandledException);

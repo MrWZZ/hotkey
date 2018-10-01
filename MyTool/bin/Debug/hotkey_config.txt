@@ -3,7 +3,7 @@
   "canUseMinID": 0,
   "items": {
     "txtCmd_Open": {
-      "hotkeyid": 49265,
+      "hotkeyid": 49272,
       "key": 32,
       "keyFlag": 4,
       "keyName": "Shift+Space",
@@ -12,11 +12,5 @@
       "controlName": "txtCmd_Open"
     }
   },
-  "hotpathName": {
-    "0-name": {
-      "ID": "0",
-      "fastName": "0-name",
-      "path": "C:\\Users\\Administrator\\Desktop\\Tool"
-    }
-  }
+  "hotpathName": {}
 }

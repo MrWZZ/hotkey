@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MyTool"
         mc:Ignorable="d"
-        Title="WindowSetting" Height="700" Width="600" ResizeMode="NoResize" Loaded="Window_Loaded" Icon="favicon.png">
+        Title="设置" Height="700" Width="600" ResizeMode="NoResize" Loaded="Window_Loaded" Icon="Resources/favicon.png">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="9*"></RowDefinition>

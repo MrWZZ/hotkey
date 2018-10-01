@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-G:\hotkey\MyTool\obj\Debug\
+E:\hotkey\MyTool\obj\Debug\
 MyTool
 none
 false
 DEBUG;TRACE
-G:\hotkey\MyTool\App.xaml
-31607112979
-1636470885
-21-490519326
-16-2023091309
-HotPathItem.xaml;MainWindow.xaml;Resources\SettingWindow.xaml;
+E:\hotkey\MyTool\App.xaml
+3671123789
+1-1577483538
+2165416693
+16-911209740
+HotPathItem.xaml;MainWindow.xaml;SettingWindow.xaml;
 
 False
 

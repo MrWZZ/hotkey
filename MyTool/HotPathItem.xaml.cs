@@ -109,7 +109,6 @@ namespace MyTool
             info.fastName = txtName.Text;
             AllControl.hotpathName.Remove(fn);
             AllControl.hotpathName.Add(txtName.Text, info);
-            AllControl.SaveConfig();
             e.Handled = false;
         }
 
@@ -142,7 +141,6 @@ namespace MyTool
             info.ID = txtID.Text;
             AllControl.hotpathId.Remove(keyId);
             AllControl.hotpathId.Add(info.ID, info);
-            AllControl.SaveConfig();
             e.Handled = false;
         }
 

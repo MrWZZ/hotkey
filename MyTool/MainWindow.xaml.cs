@@ -32,15 +32,8 @@ namespace MyTool
             //窗体状态改变时候触发
             StateChanged += OnStateChanged;
             Closing += MainWindow_Closing;
-            Closed += MainWindow_Closed;
             WindowStartupLocation = WindowStartupLocation.Manual;
             WindowCenter.MainWindow = this;
-        }
-
-
-        private void MainWindow_Closed(object sender, EventArgs e)
-        {
-            AllControl.SaveConfig();
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -90,7 +83,7 @@ namespace MyTool
             //屏幕高度
             double ph = SystemParameters.PrimaryScreenHeight;
             //工作区高度
-            double fh = SystemParameters.FullPrimaryScreenHeight;
+            double fh = SystemInformation.WorkingArea.Height;
             //任务栏高度
             double offset = ph - fh;
 

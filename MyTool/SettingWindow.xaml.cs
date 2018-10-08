@@ -8,6 +8,7 @@ using MyTool.Script;
 using Microsoft.Win32;
 using System;
 using System.Diagnostics;
+using System.IO;
 
 namespace MyTool
 {
@@ -45,10 +46,10 @@ namespace MyTool
         private void LockKeyManager_GetCombineKeyEvent(KeysInfo keysInfo)
         {
             //按下ESC键注销该控件的快捷键
-            if(keysInfo.key == 27)
+            if (keysInfo.key == 27)
             {
                 uint removeResult = AllControl.RemoveHotKeyItem(AllControl.CurrControl.Name);
-                if(removeResult == 1)
+                if (removeResult == 1)
                 {
                     ShowMassage("注销成功。");
                 }
@@ -74,14 +75,15 @@ namespace MyTool
 
             ((TextBox)AllControl.CurrControl).Text = keysInfo.keyName;
             // 注册热键
-            uint result = AllControl.AddHotkeyItem(AllControl.CurrControl.Name,keysInfo.key,keysInfo.keyFlag,keysInfo.keyName);
-            if(result == 0)
+            uint result = AllControl.AddHotkeyItem(AllControl.CurrControl.Name, keysInfo.key, keysInfo.keyFlag, keysInfo.keyName);
+            if (result == 0)
             {
                 ShowMassage("注册失败。");
             }
             else
             {
                 ShowMassage("注册成功");
+                AllControl.SaveConfig();
             }
 
         }
@@ -98,10 +100,10 @@ namespace MyTool
         }
 
         //显示当前控件的提示样式
-        private void ShowFous(Control control,bool isShow)
+        private void ShowFous(Control control, bool isShow)
         {
-            if(isShow)
-                control.Background = new SolidColorBrush(Colors.AliceBlue);
+            if (isShow)
+                control.Background = new SolidColorBrush(Colors.Yellow);
             else
                 control.Background = new SolidColorBrush(Colors.White);
         }
@@ -109,15 +111,15 @@ namespace MyTool
         //给当前页面的控件显示已快捷键名
         private void SetControlName()
         {
-            foreach(var name in AllControl.items.Keys)
+            foreach (var name in AllControl.items.Keys)
             {
                 var tb = (TextBox)FindName(name);
-                if(tb != null)
+                if (tb != null)
                 {
                     tb.Text = AllControl.items[name].keyName;
                 }
             }
-            
+
         }
 
         //在快捷列表中添加Item
@@ -144,7 +146,7 @@ namespace MyTool
 
         private void Control_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            ShowFous((Control)sender,true);
+            ShowFous((Control)sender, true);
             AllControl.CurrControl = (Control)sender;
             ClearMassage();
             LockKeyManager.Hook_Start();
@@ -170,13 +172,13 @@ namespace MyTool
                 ShowMassage("无法识别该文件。");
                 return;
             }
-            
+
             //向listbox中添加
             //当前最大ID
             foreach (var item in AllControl.hotpathId.Keys)
             {
                 int i = int.Parse(item);
-                if(AllControl.canUseMinID <= i)
+                if (AllControl.canUseMinID <= i)
                 {
                     AllControl.canUseMinID = i + 1;
                 }
@@ -197,94 +199,47 @@ namespace MyTool
         private void cbAuto_Checked(object sender, RoutedEventArgs e)
         {
             bool isChecked = (bool)cbAuto.IsChecked;
-            string name = Process.GetCurrentProcess().MainModule.FileName;
+            //完整路径
+            string path = Process.GetCurrentProcess().MainModule.FileName;
+            //文件名
+            string name = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name.ToString();
+
             bool isSuccess;
             if (isChecked) //设置开机自启动  
             {
                 AllControl.isAutoStartUp = true;
-                isSuccess = SetSelfStarting(true, name);
+                isSuccess = AllControl.CreateStartup(name, path);
+                //如果操作失败则重新设置按钮状态
+                if(isSuccess)
+                {
+                    cbAuto.IsChecked = true;
+                }
+                else
+                {
+                    cbAuto.IsChecked = false;
+                }
             }
             else //取消开机自启动  
             {
                 AllControl.isAutoStartUp = false;
-                isSuccess = SetSelfStarting(false, name);
+                // 获取全局 开始 文件夹位置
+                //string directory = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup);
+                // 获取当前登录用户的 开始 文件夹位置
+                string directory = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+                string shortcutPath = Path.Combine(directory, string.Format("{0}.lnk", name));
+                isSuccess = AllControl.DestoryFile(shortcutPath);
             }
 
             if (isSuccess)
             {
-                ShowMassage("设置成功。");
+                ShowMassage("操作成功。");
             }
             else
             {
-                ShowMassage("设置失败");
+                ShowMassage("操作失败");
             }
         }
 
-
-        /// <summary>
-        /// 开机自动启动
-        /// </summary>
-        /// <param name="started">设置开机启动，或取消开机启动</param>
-        /// <param name="exeName">注册表中的名称</param>
-        /// <returns>开启或停用是否成功</returns>
-        public static bool SetSelfStarting(bool started, string exeName)
-        {
-            RegistryKey key = null;
-            try
-            {
-
-                string exeDir = System.Windows.Forms.Application.ExecutablePath;
-                key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);//打开注册表子项
-
-                if (key == null)//如果该项不存在的话，则创建该子项
-                {
-                    key = Registry.LocalMachine.CreateSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
-                }
-                if (started)
-                {
-                    try
-                    {
-                        object ob = key.GetValue(exeName, -1);
-
-                        if (!ob.ToString().Equals(exeDir))
-                        {
-                            if (!ob.ToString().Equals("-1"))
-                            {
-                                key.DeleteValue(exeName);//取消开机启动
-                            }
-                            key.SetValue(exeName, exeDir);//设置为开机启动
-                        }
-                        key.Close();
-
-                    }
-                    catch (Exception ex)
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        key.DeleteValue(exeName);//取消开机启动
-                        key.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (key != null)
-                {
-                    key.Close();
-                }
-                return false;
-            }
-        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {

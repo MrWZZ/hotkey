@@ -3,10 +3,10 @@
   "canUseMinID": 0,
   "items": {
     "txtCmd_Open": {
-      "hotkeyid": 49264,
+      "hotkeyid": 49380,
       "key": 32,
-      "keyFlag": 4,
-      "keyName": "Shift+Space",
+      "keyFlag": 1,
+      "keyName": "Alt+Space",
       "arg": "true",
       "methodName": "SetMainVisible",
       "controlName": "txtCmd_Open"

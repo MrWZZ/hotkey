@@ -35,12 +35,10 @@ G:\hotkey\MyTool\bin\Debug\MyTool.exe
 G:\hotkey\MyTool\bin\Debug\MyTool.pdb
 G:\hotkey\MyTool\obj\Debug\MyTool.csprojAssemblyReference.cache
 G:\hotkey\MyTool\obj\Debug\MainWindow.g.cs
-G:\hotkey\MyTool\obj\Debug\Resources\SettingWindow.g.cs
 G:\hotkey\MyTool\obj\Debug\App.g.cs
 G:\hotkey\MyTool\obj\Debug\MyTool_MarkupCompile.cache
 G:\hotkey\MyTool\obj\Debug\MyTool_MarkupCompile.lref
 G:\hotkey\MyTool\obj\Debug\MainWindow.baml
-G:\hotkey\MyTool\obj\Debug\Resources\SettingWindow.baml
 G:\hotkey\MyTool\obj\Debug\MyTool.g.resources
 G:\hotkey\MyTool\obj\Debug\MyTool.Properties.Resources.resources
 G:\hotkey\MyTool\obj\Debug\MyTool.csproj.GenerateResource.cache
@@ -74,3 +72,7 @@ E:\hotkey\MyTool\obj\Debug\MyTool.csproj.CopyComplete
 E:\hotkey\MyTool\obj\Debug\MyTool.exe
 E:\hotkey\MyTool\obj\Debug\MyTool.pdb
 E:\hotkey\MyTool\obj\Debug\MyTool.csprojAssemblyReference.cache
+G:\hotkey\MyTool\obj\Debug\Interop.IWshRuntimeLibrary.dll
+G:\hotkey\MyTool\obj\Debug\MyTool.csproj.ResolveComReference.cache
+G:\hotkey\MyTool\obj\Debug\SettingWindow.baml
+G:\hotkey\MyTool\obj\Debug\SettingWindow.g.cs

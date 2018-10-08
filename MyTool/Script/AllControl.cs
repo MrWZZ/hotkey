@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 
 namespace MyTool.Script
@@ -141,6 +143,31 @@ namespace MyTool.Script
                         AddHotkeyItem(item.controlName,item.key, item.keyFlag, item.keyName);
                     }
                 }
+
+                //开启启动
+                string name = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name.ToString();
+                string directory = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+                string shortcutPath = Path.Combine(directory, string.Format("{0}.lnk", name));
+                if (isAutoStartUp)
+                {
+                    //文件不存在则重新创建
+                    if (!File.Exists(shortcutPath))
+                    {
+                        string path = Process.GetCurrentProcess().MainModule.FileName;
+                        bool isSuccess = CreateStartup(name, path);
+                        if (!isSuccess)
+                        {
+                            WindowCenter.MainWindow.ShowNotify("开机启动设置失败。");
+                            isAutoStartUp = false;
+                            SaveConfig();
+                        }
+                    }
+
+                }
+                else
+                {
+                    DestoryFile(shortcutPath);
+                }
             }
             else
             {
@@ -162,6 +189,121 @@ namespace MyTool.Script
             using (StreamWriter sw = new StreamWriter(configPath,false,Encoding.UTF8))
             {
                 sw.Write(json);
+            }
+        }
+
+        /// <summary>
+        /// 注册表：开机自动启动（在window10启动失败)
+        /// </summary>
+        /// <param name="started">设置开机启动，或取消开机启动</param>
+        /// <param name="exeName">注册表中的名称</param>
+        /// <returns>开启或停用是否成功</returns>
+        public static bool SetSelfStarting(bool started, string exeName)
+        {
+            RegistryKey key = null;
+            try
+            {
+
+                string exeDir = System.Windows.Forms.Application.ExecutablePath;
+                key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);//打开注册表子项
+
+                if (key == null)//如果该项不存在的话，则创建该子项
+                {
+                    key = Registry.LocalMachine.CreateSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
+                }
+                if (started)
+                {
+                    try
+                    {
+                        object ob = key.GetValue(exeName, -1);
+
+                        if (!ob.ToString().Equals(exeDir))
+                        {
+                            if (!ob.ToString().Equals("-1"))
+                            {
+                                key.DeleteValue(exeName);//取消开机启动
+                            }
+                            key.SetValue(exeName, exeDir);//设置为开机启动
+                        }
+                        key.Close();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        key.DeleteValue(exeName);//取消开机启动
+                        key.Close();
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch
+            {
+                if (key != null)
+                {
+                    key.Close();
+                }
+                return false;
+            }
+        }
+
+        //在开始菜单创建快捷方式启动
+        public static bool CreateStartup(string shortcutName, string targetPath, string description = null, string iconLocation = null)
+        {
+            // 获取全局 开始 文件夹位置
+            //string directory = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup);
+            // 获取当前登录用户的 开始 文件夹位置
+            string directory = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
+
+            try
+            {
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                //IWshRuntimeLibrary:添加引用 Com 中搜索 Windows Script Host Object Model
+                string shortcutPath = Path.Combine(directory, string.Format("{0}.lnk", shortcutName));
+                IWshRuntimeLibrary.WshShell shell = new IWshRuntimeLibrary.WshShell();
+                IWshRuntimeLibrary.IWshShortcut shortcut = (IWshRuntimeLibrary.IWshShortcut)shell.CreateShortcut(shortcutPath);//创建快捷方式对象
+                shortcut.TargetPath = targetPath;//指定目标路径
+                shortcut.WorkingDirectory = Path.GetDirectoryName(targetPath);//设置起始位置
+                shortcut.WindowStyle = 1;//设置运行方式，默认为常规窗口
+                shortcut.Description = description;//设置备注
+                shortcut.IconLocation = string.IsNullOrWhiteSpace(iconLocation) ? targetPath : iconLocation;//设置图标路径
+                shortcut.Save();//保存快捷方式
+
+                return true;
+            }
+            catch
+            { }
+            return false;
+        }
+
+        /// <summary>
+        /// 删除文件
+        /// </summary>
+        /// <returns></returns>
+        public static bool DestoryFile(string path)
+        {
+            try
+            {
+                File.Delete(path);
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
     }

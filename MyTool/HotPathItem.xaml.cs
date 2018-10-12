@@ -76,24 +76,24 @@ namespace MyTool
 
         private void TxtName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            
+            string text = txtName.Text.Trim();
             //名字不能是数字
             int num;
-            if (int.TryParse(txtName.Text, out num))
+            if (int.TryParse(text, out num))
             {
                 WindowCenter.SettingWindow.ShowMassage("自定义名称不能是数字。");
                 return;
             }
             //不能为空
-            if(txtName.Text == "")
+            if(text == "")
             {
                 WindowCenter.SettingWindow.ShowMassage("不能为空。");
                 return;
             }
             //键是否重复
-            if (AllControl.hotpathName.ContainsKey(txtName.Text))
+            if (AllControl.hotpathName.ContainsKey(text))
             {
-                if(txtName.Text != info.fastName)
+                if(text != info.fastName)
                 {
                     WindowCenter.SettingWindow.ShowMassage("自定义名称重复。");
                 }
@@ -106,26 +106,27 @@ namespace MyTool
             WindowCenter.SettingWindow.ClearMassage();
             string fn = info.fastName;
             //原来的键的名字
-            info.fastName = txtName.Text;
+            info.fastName = text;
             AllControl.hotpathName.Remove(fn);
-            AllControl.hotpathName.Add(txtName.Text, info);
+            AllControl.hotpathName.Add(text, info);
             e.Handled = false;
         }
 
         private void TxtID_TextChanged(object sender, TextChangedEventArgs e)
         {
+            string text = txtID.Text.Trim();
             //名字必须是数字
             int num;
-            if (!int.TryParse(txtID.Text, out num))
+            if (!int.TryParse(text, out num))
             {
                 WindowCenter.SettingWindow.ShowMassage("ID必须是数字。");
                 return;
             }
             //键是否重复
-            if (AllControl.hotpathId.ContainsKey(txtID.Text))
+            if (AllControl.hotpathId.ContainsKey(text))
             {
                 //如果和原来的一样就不显示
-                if(txtID.Text != info.ID)
+                if(text != info.ID)
                 {
                     WindowCenter.SettingWindow.ShowMassage("ID名称重复。");
                 }
@@ -138,7 +139,7 @@ namespace MyTool
             WindowCenter.SettingWindow.ClearMassage();
             //原来的键的名字
             string keyId = this.info.ID;
-            info.ID = txtID.Text;
+            info.ID = text;
             AllControl.hotpathId.Remove(keyId);
             AllControl.hotpathId.Add(info.ID, info);
             e.Handled = false;

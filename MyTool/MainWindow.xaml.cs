@@ -142,34 +142,35 @@ namespace MyTool
 
         private void txtInput_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
+            string text = txtInput.Text.Trim();
             if (e.Key == Key.Enter)
             {
                 int num = 0;
-                if (int.TryParse(txtInput.Text, out num))
+                if (int.TryParse(text, out num))
                 {
                     //判断是否存在
-                    if (!AllControl.hotpathId.ContainsKey(txtInput.Text))
+                    if (!AllControl.hotpathId.ContainsKey(text))
                     {
                         ShowMessage("ID所对应快捷路径不存在。");
                         return;
                     }
-                    string path = AllControl.hotpathId[txtInput.Text].path;
+                    string path = AllControl.hotpathId[text].path;
                     MethodCenter.Methods[MethodName.OpenFile](path);
                 }
                 else
                 {
-                    if(txtInput.Text == "")
+                    if(text == "")
                     {
                         ShowMessage("不能为空。");
                         return;
                     }
                     //判断是否存在
-                    if (!AllControl.hotpathName.ContainsKey(txtInput.Text))
+                    if (!AllControl.hotpathName.ContainsKey(text))
                     {
                         ShowMessage("自定义名称所对应快捷路径不存在。");
                         return;
                     }
-                    string path = AllControl.hotpathName[txtInput.Text].path;
+                    string path = AllControl.hotpathName[text].path;
                     MethodCenter.Methods[MethodName.OpenFile](path);
                 }
                 ShowWindow(false);

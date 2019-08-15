@@ -35,7 +35,73 @@ namespace MyTool
             {
                 cbAuto.IsChecked = false;
             }
+
+            InitUI();
         }
+
+        //初始化UI
+        private void InitUI()
+        {
+            InitSetTopUI();
+        }
+
+        #region 窗口置顶
+        private IntPtr curSelectWindowHld;
+
+        private void InitSetTopUI()
+        {
+            btnSelectWindow.Click += OnClickSelectWindowBtn;
+
+            btnMaxTop.Click += BtnMaxTop_Click;
+            btnNormal.Click += BtnNormal_Click;
+        }
+
+        private void BtnNormal_Click(object sender, RoutedEventArgs e)
+        {
+
+            bool isSuccess = TopWindow.TopManager.SetZPos(curSelectWindowHld, TopWindow.TopManager.HWND_NOTOPMOST);
+            if (!isSuccess)
+            {
+                ShowMassage("设置失败");
+                SetWindowNameLabel("");
+            }
+        }
+
+        private void BtnMaxTop_Click(object sender, RoutedEventArgs e)
+        {
+            bool isSuccess = TopWindow.TopManager.SetZPos(curSelectWindowHld, TopWindow.TopManager.HWND_TOPMOST);
+            if(!isSuccess)
+            {
+                ShowMassage("设置失败");
+                SetWindowNameLabel("");
+            }
+        }
+
+        private void OnClickSelectWindowBtn(object sender, RoutedEventArgs e)
+        {
+            MouseHookHandler.HookStart(OnWindowSystemMouseClick);
+        }
+
+        private void SetWindowNameLabel(string name)
+        {
+            labelWindowName.Content = name;
+        }
+
+        private void OnWindowSystemMouseClick(MouseHookHandler.MouseType type)
+        {
+            IntPtr hld = SelectWindowHandler.WindowFromPoint();
+            string titleName = WindownTitleHandler.GetWindowTitle(hld);
+            SetWindowNameLabel(titleName);
+            if (type == MouseHookHandler.MouseType.LeftUp)
+            {
+                curSelectWindowHld = hld;
+                MouseHookHandler.HookStop();
+            }
+        }
+
+        #endregion
+
+
 
         private void SettingWindow_Closed(object sender, EventArgs e)
         {

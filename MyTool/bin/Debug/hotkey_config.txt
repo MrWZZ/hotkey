@@ -3,10 +3,10 @@
   "canUseMinID": 0,
   "items": {
     "txtCmd_Open": {
-      "hotkeyid": 0,
-      "key": 0,
-      "keyFlag": 0,
-      "keyName": null,
+      "hotkeyid": 49976,
+      "key": 9,
+      "keyFlag": 4,
+      "keyName": "Shift+Tab",
       "arg": "true",
       "methodName": "SetMainVisible",
       "controlName": "txtCmd_Open"

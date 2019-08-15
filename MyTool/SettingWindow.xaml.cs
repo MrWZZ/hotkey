@@ -40,6 +40,7 @@ namespace MyTool
         private void SettingWindow_Closed(object sender, EventArgs e)
         {
             WindowCenter.SettingWindow = null;
+            AllControl.SaveConfig();
         }
 
         //监听组合键返回了什么信息
@@ -83,9 +84,7 @@ namespace MyTool
             else
             {
                 ShowMassage("注册成功");
-                AllControl.SaveConfig();
             }
-
         }
 
         //在下面显示提示消息

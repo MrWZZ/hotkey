@@ -159,7 +159,6 @@ namespace MyTool.Script
                         {
                             WindowCenter.MainWindow.ShowNotify("开机启动设置失败。");
                             isAutoStartUp = false;
-                            SaveConfig();
                         }
                     }
 
@@ -172,7 +171,7 @@ namespace MyTool.Script
             else
             {
                 MethodCenter.ResetConfig();
-                SaveConfig();
+                OpenSettingWindow();
             }
         }
 
@@ -288,6 +287,16 @@ namespace MyTool.Script
             catch
             { }
             return false;
+        }
+
+        //打开设置页面
+        public static void OpenSettingWindow()
+        {
+            if (WindowCenter.SettingWindow == null)
+            {
+                WindowCenter.SettingWindow = new SettingWindow();
+            }
+            WindowCenter.SettingWindow.Show();
         }
 
         /// <summary>

@@ -88,11 +88,7 @@ namespace MyTool
 
         private static void Setting(object sender, EventArgs e)
         {
-            if(WindowCenter.SettingWindow == null)
-            {
-                WindowCenter.SettingWindow = new SettingWindow();
-            }
-            WindowCenter.SettingWindow.Show();
+            AllControl.OpenSettingWindow();
         }
 
         private void SetWindowPos()

@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-G:\hotkey\MyTool\obj\Debug\
+E:\WzzWorkSpace\git\hotkey\MyTool\obj\Debug\
 MyTool
 none
 false
 DEBUG;TRACE
-G:\hotkey\MyTool\App.xaml
+E:\WzzWorkSpace\git\hotkey\MyTool\App.xaml
 3671123789
 1-1577483538
-21-1771310508
-17-2051822938
+21-1545430802
+17-1863324633
 HotPathItem.xaml;MainWindow.xaml;SettingWindow.xaml;
 
 True

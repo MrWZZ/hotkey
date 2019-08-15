@@ -3,7 +3,7 @@
   "canUseMinID": 0,
   "items": {
     "txtCmd_Open": {
-      "hotkeyid": 49380,
+      "hotkeyid": 49533,
       "key": 32,
       "keyFlag": 1,
       "keyName": "Alt+Space",

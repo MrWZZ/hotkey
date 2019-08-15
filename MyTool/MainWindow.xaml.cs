@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using TopWindow;
 using MyTool.Script;
 using System.Windows.Media;
+using System.Windows.Documents;
 
 namespace MyTool
 {
@@ -73,15 +74,13 @@ namespace MyTool
             notifyIcon.ContextMenu = new ContextMenu(childen);
         }
 
-        private void Setting(object sender, EventArgs e)
+        private static void Setting(object sender, EventArgs e)
         {
             if(WindowCenter.SettingWindow == null)
             {
                 WindowCenter.SettingWindow = new SettingWindow();
             }
             WindowCenter.SettingWindow.Show();
-            
-
         }
 
         private void SetWindowPos()
@@ -106,14 +105,15 @@ namespace MyTool
                 Visibility = Visibility.Visible;
                 TopManager.SetTop(this);
                 SetWindowPos();
-                this.txtInput.SelectAll();
+                this.txtInput.Text = "";
                 Activate();
+                txtInput.Focus();
+                SetMessBoxVisible(false);
             }
             else
             {
                 Visibility = Visibility.Hidden;
             }
-
         }
 
         /// <summary>
@@ -179,17 +179,88 @@ namespace MyTool
             {
                 ShowWindow(false);
             }
+            else if(e.Key == Key.Back)
+            {
+                // todo 显示提示框
+            }
+            else
+            {
+                SetMessBoxVisible(false);
+                autoTip = true;
+            }
+
+            
         }
 
         //在方框显示消息
         private void ShowMessage(string msg)
         {
-            txtInput.Text = msg;
+            SetMessBoxVisible(true);
+            lableMessage.Content = msg;
+            txtInput.Text = "";
+        }
+
+        private void SetMessBoxVisible(bool isShow)
+        {
+            if(isShow)
+            {
+                lableMessage.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                lableMessage.Visibility = Visibility.Hidden;
+            }
+            
         }
 
         public void ShowNotify(string msg)
         {
             notifyIcon.ShowBalloonTip(500, "热键工具", msg, ToolTipIcon.Error);
+        }
+
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            txtInput.Focus();
+            SetMessBoxVisible(false);
+        }
+
+        private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            SetMessBoxVisible(false);
+        }
+
+        private void TxtInput_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            AutoTip(txtInput.Text);
+        }
+
+        string[] tipList = new string[] { "nihao", "buhao", "lalal" };
+
+        bool autoTip = true;
+        private void AutoTip(string str)
+        {
+            if(str.Length == 0 || !autoTip)
+            {
+                return;
+            }
+            autoTip = false;
+            foreach (var tip in tipList)
+            {
+                if(tip.Length < str.Length)
+                {
+                    continue;
+                }
+
+                if(tip.StartsWith(str))
+                {
+                    
+                    txtInput.Text = tip;
+                    txtInput.Select(str.Length, tip.Length);
+                    return;
+                }
+            }
+
+
         }
     }
 }

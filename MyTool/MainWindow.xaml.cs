@@ -16,6 +16,8 @@ namespace MyTool
     {
         //系统托盘
         public NotifyIcon notifyIcon;
+        private bool autoTip = true;
+        string[] tipList;
 
         protected override void OnSourceInitialized(EventArgs e)
         {
@@ -24,6 +26,15 @@ namespace MyTool
             AllControl.register = new Register(this);
             AllControl.ReadConfig();
             ShowWindow(false);
+        }
+
+        private void SetAutoListContent()
+        {
+            if(AllControl.hotpathName != null && AllControl.hotpathName.Count != 0)
+            {
+                tipList = new string[AllControl.hotpathName.Count];
+                AllControl.hotpathName.Keys.CopyTo(tipList, 0);
+            }
         }
 
         public MainWindow()
@@ -36,6 +47,7 @@ namespace MyTool
             Closed += MainWindow_Closed;
             WindowStartupLocation = WindowStartupLocation.Manual;
             WindowCenter.MainWindow = this;
+            SetAutoListContent();
         }
 
         private void MainWindow_Closed(object sender, EventArgs e)
@@ -106,9 +118,10 @@ namespace MyTool
                 TopManager.SetTop(this);
                 SetWindowPos();
                 this.txtInput.Text = "";
-                Activate();
                 txtInput.Focus();
                 SetMessBoxVisible(false);
+                SetAutoListContent();
+                Activate();
             }
             else
             {
@@ -188,7 +201,6 @@ namespace MyTool
                 SetMessBoxVisible(false);
                 autoTip = true;
             }
-
             
         }
 
@@ -233,13 +245,10 @@ namespace MyTool
         {
             AutoTip(txtInput.Text);
         }
-
-        string[] tipList = new string[] { "nihao", "buhao", "lalal" };
-
-        bool autoTip = true;
+        
         private void AutoTip(string str)
         {
-            if(str.Length == 0 || !autoTip)
+            if(str.Length == 0 || !autoTip || tipList == null)
             {
                 return;
             }

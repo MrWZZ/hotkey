@@ -96,7 +96,6 @@ E:\WzzWorkSpace\git\hotkey\MyTool\obj\Debug\MainWindow.baml
 E:\WzzWorkSpace\git\hotkey\MyTool\obj\Debug\MyTool.g.resources
 E:\WzzWorkSpace\git\hotkey\MyTool\obj\Debug\MyTool.Properties.Resources.resources
 E:\WzzWorkSpace\git\hotkey\MyTool\obj\Debug\MyTool.csproj.GenerateResource.cache
-E:\WzzWorkSpace\git\hotkey\MyTool\obj\Debug\MyTool.csproj.CoreCompileInputs.cache
 E:\WzzWorkSpace\git\hotkey\MyTool\obj\Debug\MyTool.csproj.CopyComplete
 E:\WzzWorkSpace\git\hotkey\MyTool\obj\Debug\MyTool.exe
 E:\WzzWorkSpace\git\hotkey\MyTool\obj\Debug\MyTool.pdb

@@ -3,7 +3,7 @@
   "canUseMinID": 0,
   "items": {
     "txtCmd_Open": {
-      "hotkeyid": 49388,
+      "hotkeyid": 49511,
       "key": 9,
       "keyFlag": 4,
       "keyName": "Shift+Tab",

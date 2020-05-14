@@ -86,8 +86,12 @@
     <Compile Include="Script\KeysInfo.cs" />
     <Compile Include="Script\HotKey.cs" />
     <Compile Include="Script\LockKey.cs" />
+    <Compile Include="Script\MainW.cs" />
     <Compile Include="Script\MethodCenter.cs" />
+    <Compile Include="Script\MouseHookHandler.cs" />
+    <Compile Include="Script\SelectWindowHandler.cs" />
     <Compile Include="Script\TopWindow.cs" />
+    <Compile Include="Script\WindownTitleHandler.cs" />
     <Compile Include="SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>
     </Compile>
